@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{book.title}}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'CSS/show_book_style.css' %}">
+</head>
+<body>
+    <header>
+        <h2>Welcome, {{first_name}}</h2>
+        <div class="nav-bar">
+            <a href="/books">Home</a>
+            <a href="/books/my_favorites">My Favorites</a>
+            <a href="/logout">Log Out</a>
+        </div>
+    </header>
+    <main>
+        <div class="container">
+            <form action="update/" method="post" class="d-inline">
+                {% csrf_token %}
+                <input type="text" value="{{book.title}}" name="title" class="book-title-input form-control">
+                <h5>Added by: {{book.uploaded_by.first_name}} {{book.uploaded_by.last_name}}</h4>
+                <h6>Added on: {{book.created_at}}</h5>
+                <h6>Last updated on: {{book.updated_at}}</h5>
+                <p>Description:</p>
+                <textarea name="desc" id="desc" cols="50" rows="10" class="form-control">{{book.desc}}</textarea>
+                <input type="submit" value="Update" class="btn btn-dark">
+            </form>
+            <form action="delete/" method="post" class="d-inline">
+                {% csrf_token %}
+                <input type="submit" value="Delete" class="btn btn-danger">
+            </form>
+            {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                <ul class="messages">    
+                    {% for message in messages %}    
+                        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>    
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+        </div>
+        <div class="container users-who-like">
+            <h3>Users who like this book:</h3>
+            <ul>
+                {% for user in book.users_who_like.all %}
+                <li class="user-li">
+                    <p class="d-inline">{{user.first_name}} {{user.last_name}}</p>
+                    {% if user.id == request.session.logged_user %}
+                    <a class="btn btn-outline-primary btn-sm d-inline" href="/books/{{book.id}}/unfavorite/">Unfavorite</a>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            </ul>
+                {% if not logged_user in book.users_who_like.all %}
+                <a class="btn btn-outline-primary btn-sm" href="/books/{{book.id}}/favorite/">Favorite</a>
+                {% endif %}
+        </div>
+    </main>
+</body>
+</html>

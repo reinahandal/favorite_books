@@ -1,0 +1,35 @@
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    border-bottom: 2px black solid;
+}
+.nav-bar {
+    width: 30%;
+    display: flex;
+    justify-content: space-around;
+}
+main {
+    display: flex;
+    padding: 15px;
+}
+.users-who-like {
+    width: 40%;
+    margin-left: 30px;
+}
+.user-li {
+    line-height: 30px;
+}
+.book-title-input {
+    width: 80%;
+    font-size: 1.5rem;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+.btn {
+    margin: 10px 0px;
+}
+.favorites-list {
+    margin-top: 15px;
+}
